@@ -7,7 +7,7 @@
     <meta name="description" content="a javascript port of potrace" />
     <meta name="keywords" content="potrace,trace,vectorization,svg" />
 
-    <title>potrace</title>
+    <title>WireMolding</title>
     <style>
 body {
   margin: 30px;
@@ -75,12 +75,12 @@ p{
 
   <body>
     <header>
-      <h1>potrace</h1>
+      <h1>WireMolding</h1>
     </header>
 
     <article>
-      <p>A javascript port of <a href="http://potrace.sourceforge.net" target="_blank">Potrace</a>.</p>
-      <p><a href="https://github.com/kilobtye/potrace">source code</a></p>
+      <p>Generate a sketch from a photo</p>
+      <p></p>
       <input type="file" id="imageInput" accept="image/*">
       <div id="drop"><a href="#" id="imageSelect">open an image</a> <br> or drag an image here</div>
       <div>
@@ -88,7 +88,6 @@ p{
         <a href="#" id="save">Export SVG</a>
       </div>
       <div id="imgdiv"> </div>
-      <div> </div>
       <div id="svgdiv"> </div>
     </article>
 
@@ -168,7 +167,7 @@ function displayImg(){
 function displaySVG(size, type){
   var svgdiv = document.getElementById('svgdiv');
   svgdiv.style.display = 'inline-block';
-  svgdiv.innerHTML = "<p>Result:</p>" + Potrace.getSVG(size, type);
+  svgdiv.innerHTML = "<p>Result:</p>" + Potrace.getThumbSVG(size, type);
 }
 
 </script>

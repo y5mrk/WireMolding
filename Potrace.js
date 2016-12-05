@@ -102,6 +102,7 @@ var Potrace = (function() {
   }
 
   var imgElement = document.createElement("img"),
+      srcimg = document.createElement("img"),
       imgCanvas = document.createElement("canvas"),
       bm = null,
       pathlist = [],
@@ -115,12 +116,15 @@ var Potrace = (function() {
         opttolerance: 0.2
       };
 
+  srcimg.setAttribute("width", "300");
+
   imgElement.onload = function() {
     loadCanvas();
     loadBm();
   };
 
   function loadImageFromFile(file) {
+    srcimg.src = file.path;
     if (info.isReady) {
       clear();
     }
@@ -139,8 +143,10 @@ var Potrace = (function() {
       clear();
     }
     imgElement.src = url;
-
+    srcimg.src = url;
   }
+
+
 
   function setParameter(obj) {
    var key;
@@ -1296,12 +1302,19 @@ var Potrace = (function() {
     return svg;
   }
 
+  function getThumbSVG(size, type) {
+    var mainsvg = getSVG(size, type);
+    var thumbsvg = mainsvg.replace('width="180mm" height="240mm"', 'width="300" height="400"');
+    return thumbsvg;
+  }
+
   return{
     loadImageFromFile: loadImageFromFile,
     loadImageFromUrl: loadImageFromUrl,
     setParameter: setParameter,
     process: process,
     getSVG: getSVG,
-    img: imgElement
+    img: srcimg,
+    getThumbSVG: getThumbSVG
   };
 })();
