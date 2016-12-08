@@ -88,7 +88,7 @@ var Potrace = (function() {
         turnpolicy: "minority",
         turdsize: 2,
         optcurve: true,
-        alphamax: 1,
+        alphamax: 0.5,
         opttolerance: 0.2
       };
 
@@ -915,6 +915,7 @@ var Potrace = (function() {
         }
         curve.alpha0[j] = alpha;
 
+
         if (alpha >= info.alphamax) {
           curve.tag[j] = "CORNER";
           curve.c[3 * j + 1] = curve.vertex[j];
@@ -1256,9 +1257,6 @@ var Potrace = (function() {
 
     var w = bm.w * size, h = bm.h * size,
       len = pathlist.length, c, i, strokec, fillc, fillrule;
-
-    // var ratioW = w/300,
-    //   ratioH = h/400;
 
     var svg = '<svg id="svg" version="1.1" width="' + 180 + 'mm" height="' + 240 +
         'mm" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">';

@@ -157,7 +157,11 @@ window.onload = function(){
   }, false);
 
   btnThreshold.onclick = function(){
-    console.log(Potrace.getThreshold());
+    Potrace.loadImageFromUrl("./image/test.jpg");
+    Potrace.process(function(){
+      displayImg();
+      displaySVG(3);
+    });
   };
 };
 
@@ -184,7 +188,6 @@ function displaySVG(size, type){
 
 function getValue(newVal){
   document.getElementById("thresholdval").innerHTML=newVal;
-  // Potrace.threshold = newVal;
   Potrace.setThreshold(newVal);
 }
 
