@@ -157,7 +157,7 @@ window.onload = function(){
   }, false);
 
   btnThreshold.onclick = function(){
-    Potrace.loadImageFromUrl("./image/test.jpg");
+    Potrace.loadImageFromUrl(Potrace.img.src);
     Potrace.process(function(){
       displayImg();
       displaySVG(3);
