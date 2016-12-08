@@ -1,38 +1,14 @@
-/* Copyright (C) 2001-2013 Peter Selinger.
- *
- * A javascript port of Potrace (http://potrace.sourceforge.net).
- *
- * Licensed under the GPL
- *
- * Usage
- *   loadImageFromFile(file) : load image from File API
- *   loadImageFromUrl(url): load image from URL
- *     because of the same-origin policy, can not load image from another domain.
- *     input color/grayscale image is simply converted to binary image. no pre-
- *     process is performed.
- *
- *   setParameter({para1: value, ...}) : set parameters
- *     parameters:
- *        turnpolicy ("black" / "white" / "left" / "right" / "minority" / "majority")
- *          how to resolve ambiguities in path decomposition. (default: "minority")
- *        turdsize
- *          suppress speckles of up to this size (default: 2)
- *        optcurve (true / false)
- *          turn on/off curve optimization (default: true)
- *        alphamax
- *          corner threshold parameter (default: 1)
- *        opttolerance
- *          curve optimization tolerance (default: 0.2)
- *
- *   process(callback) : wait for the image be loaded, then run potrace algorithm,
- *                       then call callback function.
- *
- *   getSVG(size, opt_type) : return a string of generated SVG image.
- *                                    result_image_size = original_image_size * size
- *                                    optional parameter opt_type can be "curve"
- */
-
 var Potrace = (function() {
+
+  var threshold = 128;
+
+  function setThreshold(val){
+    threshold = val;
+  };
+
+  function getThreshold(){
+    return threshold;
+  }
 
   function Point(x, y) {
     this.x = x;
@@ -147,7 +123,6 @@ var Potrace = (function() {
   }
 
 
-
   function setParameter(obj) {
    var key;
    for (key in obj) {
@@ -156,6 +131,8 @@ var Potrace = (function() {
      }
     }
   }
+
+
 
   function loadCanvas() {
     imgCanvas.width = imgElement.width;
@@ -169,10 +146,11 @@ var Potrace = (function() {
     bm = new Bitmap(imgCanvas.width, imgCanvas.height);
     var imgdataobj = ctx.getImageData(0, 0, bm.w, bm.h);
     var l = imgdataobj.data.length, i, j, color;
+    // var thre = threshold;
     for (i = 0, j = 0; i < l; i += 4, j++) {
       color = 0.2126 * imgdataobj.data[i] + 0.7153 * imgdataobj.data[i + 1] +
           0.0721 * imgdataobj.data[i + 2];
-      bm.data[j] = (color < 128 ? 1 : 0);
+      bm.data[j] = (color < threshold ? 1 : 0);
     }
     info.isReady = true;
   }
@@ -1315,6 +1293,8 @@ var Potrace = (function() {
     process: process,
     getSVG: getSVG,
     img: srcimg,
-    getThumbSVG: getThumbSVG
+    getThumbSVG: getThumbSVG,
+    setThreshold: setThreshold,
+    getThreshold: getThreshold
   };
 })();

@@ -83,6 +83,13 @@ p{
       <p></p>
       <input type="file" id="imageInput" accept="image/*">
       <div id="drop"><a href="#" id="imageSelect">open an image</a> <br> or drag an image here</div>
+      <div id="threshold">
+        <h3>threshold</h3>
+        <input type="range" id="bar" min="0" max="255" step="1" value="128" oninput="getValue(this.value)" onchange="getValue(this.value)">
+        <span id="thresholdval">128</span>
+        <input type="button" id="btnThreshold" value="Run"/>
+        <p></p>
+      </div>
       <div>
         <a href="#" id="run">open test.jpg</a>
         <a href="#" id="save">Export SVG</a>
@@ -96,7 +103,8 @@ p{
 
 window.onload = function(){
   var imageSelect = document.getElementById("imageSelect"),
-      imageInput = document.getElementById("imageInput");
+      imageInput = document.getElementById("imageInput"),
+      btnThreshold = document.getElementById("btnThreshold");
   imageSelect.addEventListener("click", function (e) {
     imageInput.click();
     e.preventDefault();
@@ -147,6 +155,10 @@ window.onload = function(){
     handleFiles(e.dataTransfer.files);
     return false;
   }, false);
+
+  btnThreshold.onclick = function(){
+    console.log(Potrace.getThreshold());
+  };
 };
 
 function handleFiles(files) {
@@ -168,6 +180,12 @@ function displaySVG(size, type){
   var svgdiv = document.getElementById('svgdiv');
   svgdiv.style.display = 'inline-block';
   svgdiv.innerHTML = "<p>Result:</p>" + Potrace.getThumbSVG(size, type);
+}
+
+function getValue(newVal){
+  document.getElementById("thresholdval").innerHTML=newVal;
+  // Potrace.threshold = newVal;
+  Potrace.setThreshold(newVal);
 }
 
 </script>
