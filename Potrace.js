@@ -146,7 +146,6 @@ var Potrace = (function() {
     bm = new Bitmap(imgCanvas.width, imgCanvas.height);
     var imgdataobj = ctx.getImageData(0, 0, bm.w, bm.h);
     var l = imgdataobj.data.length, i, j, color;
-    // var thre = threshold;
     for (i = 0, j = 0; i < l; i += 4, j++) {
       color = 0.2126 * imgdataobj.data[i] + 0.7153 * imgdataobj.data[i + 1] +
           0.0721 * imgdataobj.data[i + 2];
