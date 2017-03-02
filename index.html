@@ -12,6 +12,7 @@
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/stylesheet.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
+    <script src="js/three.min.js"></script>
     <script src="js/bundle.js"></script>
   </head>
 
@@ -20,139 +21,62 @@
       <h1>WireMolding</h1>
     </div>
 
-    <article>
-      <p>Generate a sketch from a photo</p>
-      <p></p>
-      <input type="file" id="imageInput" accept="image/*">
-      <div id="drop"><a href="#" id="imageSelect">open an image</a> <br> or drag an image here</div>
-      <div id="threshold">
-        <h3>threshold</h3>
-        <div class="row">
-          <div class="col-xs-6">
-            <div class="range range-info">
-              <input type="range" id="bar" min="0" max="255" step="1" value="128" oninput="getValue(this.value)" onchange="getValue(this.value)">
-              <output id="thresholdval">128</output>
+    <ul id="tab-menu" class="nav nav-tabs">
+      <li class="active"><a href="#Home" data-toggle="tab">Home</a></li>
+      <li><a href="#construct3D" data-toggle="tab">Construct</a></li>
+      <li><a href="#3Dviewer" data-toggle="tab">Viewer</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="Home">
+        <article>
+          <p>Generate a sketch from a photo</p>
+          <p></p>
+          <input type="file" id="imageInput" accept="image/*">
+          <div id="drop"><a href="#" id="imageSelect">open an image</a> <br> or drag an image here</div>
+          <div id="threshold">
+            <h3>threshold</h3>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="range range-info">
+                  <input type="range" id="bar" min="0" max="255" step="1" value="128" oninput="getValue(this.value)" onchange="getValue(this.value)">
+                  <output id="thresholdval">128</output>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <input type="button" class="btn btn-default" id="btnThreshold" value="Run"/>
+              </div>
+            </div>
+            <p></p>
+          </div>
+
+          <div>
+            <a href="#" class="btn btn-default" id="run">open test.jpg</a>
+            <a href="#" class="btn btn-default" id="save">Export SVG</a>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-6 col-md-3">
+              <!-- <div class="thumbnail"> -->
+                <div id="imgdiv"> </div>
+                <!-- <div class="caption">
+                  <h4>Input image</h4>
+                </div> -->
+                <div id="svgdiv"> </div>
+              <!-- </div> -->
             </div>
           </div>
-          <div class="col-xs-6">
-            <input type="button" class="btn btn-default" id="btnThreshold" value="Run"/>
-          </div>
-        </div>
-        <p></p>
-      </div>
+        </article>
+        <script src="Potrace.js"></script>
+        <script src="js/home.js"></script>
+      </div> <!-- HOME -->
 
-      <div>
-        <a href="#" class="btn btn-default" id="run">open test.jpg</a>
-        <a href="#" class="btn btn-default" id="save">Export SVG</a>
-      </div>
-
-      <div class="row">
-        <div class="col-xs-6 col-md-3">
-          <!-- <div class="thumbnail"> -->
-            <div id="imgdiv"> </div>
-            <!-- <div class="caption">
-              <h4>Input image</h4>
-            </div> -->
-            <div id="svgdiv"> </div>
-          <!-- </div> -->
-        </div>
-      </div>
-    </article>
-
-    <script src="Potrace.js"></script>
-    <script>
-
-    window.onload = function(){
-      var imageSelect = document.getElementById("imageSelect"),
-          imageInput = document.getElementById("imageInput"),
-          btnThreshold = document.getElementById("btnThreshold");
-      imageSelect.addEventListener("click", function (e) {
-        imageInput.click();
-        e.preventDefault();
-      }, false);
-
-      imageInput.addEventListener("change", function (e) {
-        handleFiles(this.files);
-      }, false);
-
-      document.getElementById("run").addEventListener("click", function (e) {
-        Potrace.loadImageFromUrl("./image/test.jpg");
-        Potrace.process(function(){
-          displayImg();
-          displaySVG(3);
-        });
-      }, false);
-
-      document.getElementById("save").addEventListener("click", function (e) {
-    	 e.target.download = "potrace" + (new Date()).toLocaleTimeString() + ".svg";
-    	 e.target.href = "data:image/svg+xml;," + Potrace.getSVG(1);
-      }, false);
-
-      var drop = document.getElementById('drop');
-      drop.addEventListener("dragenter", function (e) {
-        if (e.preventDefault) e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-        this.classList.add('hovering');
-        return false;
-      }, false);
-
-      drop.addEventListener("dragleave", function (e) {
-        if (e.preventDefault) e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-        this.classList.remove('hovering');
-        return false;
-      }, false);
-
-      drop.addEventListener("dragover", function (e) {
-        if (e.preventDefault) e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-        this.classList.add('hovering');
-        return false;
-      }, false);
-
-      drop.addEventListener("drop", function (e) {
-        if (e.preventDefault) e.preventDefault();
-        this.classList.remove('hovering');
-        handleFiles(e.dataTransfer.files);
-        return false;
-      }, false);
-
-      btnThreshold.onclick = function(){
-        Potrace.loadImageFromUrl(Potrace.img.src);
-        Potrace.process(function(){
-          displayImg();
-          displaySVG(3);
-        });
-      };
-    };
-
-    function handleFiles(files) {
-      Potrace.loadImageFromFile(files[0]);
-      Potrace.process(function(){
-        displayImg();
-        displaySVG(1);
-      });
-    }
-
-    function displayImg(){
-      var imgdiv = document.getElementById('imgdiv');
-      imgdiv.style.display = 'inline-block';
-      imgdiv.innerHTML = "<p>Input image:</p>";
-      imgdiv.appendChild(Potrace.img);
-    }
-
-    function displaySVG(size, type){
-      var svgdiv = document.getElementById('svgdiv');
-      svgdiv.style.display = 'inline-block';
-      svgdiv.innerHTML = "<p>Result:</p>" + Potrace.getThumbSVG(size, type);
-    }
-
-    function getValue(newVal){
-      document.getElementById("thresholdval").innerHTML=newVal;
-      Potrace.setThreshold(newVal);
-    }
-
-    </script>
+      <div class="tab-pane" id="construct3D">
+        <article>
+        </article>
+      </div> <!-- construct3D -->
+      <div class="tab-pane" id="3Dviewer">Tab3 Content</div>
+    </div>
 
   </body>
 </html>
