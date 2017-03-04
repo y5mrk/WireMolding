@@ -103,15 +103,26 @@ function getValue(newVal){
 
 // three.js
 
-var scene, camera, renderer;
+var scene, axes, grid, camera, controls, renderer;
 var geometry, material, mesh;
 
 function init() {
 
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.z = 1000;
+    // 座標軸を表示
+    axes = new THREE.AxisHelper(2000);
+    scene.add(axes);
+
+    grid = new THREE.GridHelper(10000, 50);
+    grid.material.color = new THREE.Color( 0xffffff);
+    scene.add(grid);
+
+    camera = new THREE.PerspectiveCamera( 75, 600 / 400, 1, 1000000 );
+    // camera.position.z = 1000;
+    camera.position.set(30, 45, 1000);
+    camera.lookAt(scene.position);
+    controls = new THREE.OrbitControls(camera);
 
     geometry = new THREE.BoxGeometry( 200, 200, 200 );
     material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
@@ -120,14 +131,16 @@ function init() {
     scene.add( mesh );
 
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( 600, 400 );
+    renderer.setClearColor(0xF0F0F0, 1.0);
 
-    document.body.appendChild( renderer.domElement );
+    document.getElementById("viewer-area").appendChild( renderer.domElement );
 
 }
 
 function animate() {
 
+    controls.update();
     animate_id = requestAnimationFrame( animate );
 
     mesh.rotation.x += 0.01;
