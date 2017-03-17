@@ -11,13 +11,15 @@
 
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/stylesheet.css" rel="stylesheet">
+    <link href="css/viewer.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
     <script src="js/three.min.js"></script>
-    <script type="text/javascript" src="js/stats.js"></script>
-    <script type="text/javascript" src="js/dat.gui.js"></script>
+    <!-- <script src="js/OrbitControls.js"></script> -->
+    <!-- <script type="text/javascript" src="js/dat.gui.js"></script> -->
     <script type="text/javascript" src="js/d3-threeD.js"></script>
-    <script type="text/javascript" src="js/OrbitControls.js"></script>
     <script src="js/bundle.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/viewer.js"></script>
   </head>
 
   <body>
@@ -43,7 +45,7 @@
             <div class="row">
               <div class="col-xs-6">
                 <div class="range range-info">
-                  <input type="range" id="bar" min="0" max="255" step="1" value="128" oninput="getValue(this.value)" onchange="getValue(this.value)">
+                  <input type="range" id="bar" min="0" max="255" step="1" value="128" oninput="getValue(this.value)" onchange="thresholdval.value=value">
                   <output id="thresholdval">128</output>
                 </div>
               </div>
@@ -72,14 +74,14 @@
           </div>
         </article>
         <script src="Potrace.js"></script>
-        <script src="js/home.js"></script>
       </div> <!-- HOME -->
 
       <div class="tab-pane" id="construct3D">
         <article>
           <p>Construct a 3D model</p>
-          <div id="Stats-output"></div>
-          <div id = "viewer-area"></div>
+          <div id = "viewer-top">
+            <div id = "viewer-area"></div>
+          </div>
 
           <div id="batman" style="display:none">
               <svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1152px" height="1152px" xml:space="preserve">
@@ -90,6 +92,47 @@
           </svg>
           </div>
 
+          <div id="control-area">
+            <!-- <div class="range">
+           <input type="range" name="range" min="1" max="100" value="50" onchange="range.value=value">
+           <output id="range">50</output>
+         </div> -->
+            <p>amount</p>
+            <div class="range range-info">
+              <!-- <input type="range" name="range" min="0" max="20" step="0.1" value="2" onchange="rangePrimary.value=value">
+              <output id="rangePrimary">2</output> -->
+              <input type="range" name="range" min="0" max="20" step="0.1" value="2" onchange="controlAmount.value=value">
+              <output id="controlAmount">2</output>
+            </div>
+            <p>bevelThickness</p>
+            <div class="range range-info">
+              <input type="range" name="range" min="0" max="10" step="0.1" value="2" onchange="controlBevelThickness.value=value">
+              <output id="controlBevelThickness">2</output>
+            </div>
+            <p>bevelSize</p>
+            <div class="range range-info">
+              <input type="range" name="range" min="0" max="10" step="0.01" value="0.5" onchange="controlBevelSize.value=value">
+              <output id="controlBevelSize">0.5</output>
+            </div>
+            <p>bevelSegments</p>
+            <div class="range range-info">
+              <input type="range" name="range" min="0" max="30" step="1" value="3" onchange="controlBevelSegments.value=value">
+              <output id="controlBevelSegments">3</output>
+            </div>
+            <div class="checkbox">
+              <label><input type="checkbox" value="">bevelEnabled</label>
+            </div>
+            <p>curveSegments</p>
+            <div class="range range-info">
+              <input type="range" name="range" min="1" max="30" step="1" value="12" onchange="controlCurveSegments.value=value">
+              <output id="controlCurveSegments">12</output>
+            </div>
+            <p>steps</p>
+            <div class="range range-info">
+              <input type="range" name="range" min="1" max="5" step="1" value="1" onchange="controlSteps.value=value">
+              <output id="controlSteps">1</output>
+            </div>
+          </div>
         </article>
       </div> <!-- construct3D -->
       <div class="tab-pane" id="3Dviewer">Tab3 Content</div>
