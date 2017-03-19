@@ -12,13 +12,25 @@
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/stylesheet.css" rel="stylesheet">
     <link href="css/viewer.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="http://defghi1977.html.xdomain.jp/tech/img2svg/favicon.png">
+		<link rel="stylesheet" type="text/css" href="potrace/potraceHtml.css">
+
     <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
+
+    <script async="" src="potrace/analytics.js"></script>
+    <script type="text/javascript" src="potrace/jsziptools.min.js"></script>
+		<script type="text/javascript" src="potrace/potrace-packed.js"></script>
+		<script type="text/javascript" src="potrace/rgbcolor.js"></script>
+		<script type="text/javascript" src="potrace/canvg.js"></script>
+		<script type="text/javascript" src="potrace/potraceHtml.js"></script>
+		<script type="text/javascript" src="potrace/canvasFilter.js"></script>
+		<script src="potrace/ga.js"></script>
     <script src="js/three.min.js"></script>
     <!-- <script src="js/OrbitControls.js"></script> -->
     <!-- <script type="text/javascript" src="js/dat.gui.js"></script> -->
     <script type="text/javascript" src="js/d3-threeD.js"></script>
     <script src="js/bundle.js"></script>
-    <script src="js/home.js"></script>
     <script src="js/viewer.js"></script>
   </head>
 
@@ -38,42 +50,170 @@
         <article>
           <p>Generate a sketch from a photo</p>
           <p></p>
-          <input type="file" id="imageInput" accept="image/*">
-          <div id="drop"><a href="#" id="imageSelect">open an image</a> <br> or drag an image here</div>
-          <div id="threshold">
-            <h3>threshold</h3>
-            <div class="row">
-              <div class="col-xs-6">
-                <div class="range range-info">
-                  <input type="range" id="bar" min="0" max="255" step="1" value="128" oninput="getValue(this.value)" onchange="thresholdval.value=value">
-                  <output id="thresholdval">128</output>
-                </div>
-              </div>
-              <div class="col-xs-6">
-                <input type="button" class="btn btn-default" id="btnThreshold" value="Run"/>
-              </div>
-            </div>
-            <p></p>
-          </div>
 
-          <div>
-            <a href="#" class="btn btn-default" id="run">open test.jpg</a>
-            <a href="#" class="btn btn-default" id="save">Export SVG</a>
-          </div>
+          <section id="main">
+          			<div id="view">
+          				<div id="canvasContainer">
+          					<canvas id="canvas" width="400" height="400" title="任意の画像ファイルをここにドロップして下さい．"></canvas>
+          				</div>
+          				<iframe id="svgFrame" src="potrace/inner.html" scrolling="no"></iframe>
+          				<div id="svgCover" title="処理結果のsvgがここに表示されます．"></div>
+          				<svg id="svgBG" width="400" height="400" viewBox="0 0 400 400">
+          					<image id="svgBGImg" x="0" y="0" width="400" height="400"></image>
+          				</svg>
+          				<img id="img" src="potrace/null.png">
+          			</div>
+          			<form id="mainForm">
+          				<div>
+          					<fieldset id="source">
+          						<legend>入力画像情報</legend>
+          						<div>
+          							<label>幅</label>
+          							<input type="text" id="sourceWidth" readonly="readOnly">px
+          						</div>
+          						<div>
+          							<label>高さ</label>
+          							<input type="text" id="sourceHeight" readonly="readOnly">px
+          						</div>
+          					</fieldset>
+          					<fieldset id="result">
+          						<legend>出力情報</legend>
+          						<div title="大体のsvgファイルの大きさです．svgzではここから更に2〜3分の1のサイズになります．">
+          							<label>データ長</label>
+          							<input type="text" id="resultLength" readonly="readOnly">B
+          						</div>
+          						<div title="処理にかかった時間です．">
+          							<label>所要時間</label>
+          							<input type="text" id="resultTime" readonly="readOnly">ms
+          						</div>
+          					</fieldset>
+          				</div>
+          				<div>
+          					<fieldset id="input">
+          						<legend>入力設定</legend>
+          						<div>
+          							<label>画像選択</label>
+          							<input type="file" id="file">
+          						</div>
+          						<div title="0〜1 画像を2値化する際の基準明度を指定します．">
+          							<label>閾値</label>
+          							<input type="number" id="threshold" min="0" max="1" step="0.005" value="0.625">
+          						</div>
+          						<div title="0〜100 パス化した際のゴミを削除します．">
+          							<label>ノイズ除去</label>
+          							<input type="number" id="turdSize" min="0" max="100" value="3">
+          						</div>
+          						<div title="0〜1 値を小さくすると，直線が多く含まれるようになります．0で無効．">
+          							<label>αmax</label>
+          							<input type="number" id="alphamax" min="0" max="1" step="0.005" value="0.9">
+          						</div>
+          						<div title="-1(丸め無し),0〜5 桁数を少なくすることで，ファイルサイズを下げる効果があります．">
+          							<label>精度桁数</label>
+          							<input type="number" id="precision" min="-1" max="5" step="1" value="-1">
+          						</div>
+          						<input type="checkBox" id="chkFilter">
+          						<div title="画像に効果を与えます．">
+          							<label>効果</label>
+          							<input type="button" value="ぼかし" id="btnBlur" style="visibility: visible;">
+          							<input type="button" value="ｼｬｰﾌﾟ" id="btnSharpness" style="visibility: visible;">
+          							<input type="button" value="赤成分" id="btnRedToGray" style="visibility: visible;">
+          							<input type="button" value="緑成分" id="btnGreenToGray" style="visibility: visible;">
+          							<input type="button" value="青成分" id="btnBlueToGray" style="visibility: visible;">
+          						</div>
+          						<div title="画像に効果を与えます．"><span>《画像にフィルターを掛ける場合は，チェックを入れて下さい．》</span>
+          							<input type="number" id="gamma" min="0" max="3" step="0.01" value="0.5" style="width:50px;">
+          							<input type="button" value="ガンマ" id="btnGamma" style="visibility: visible;">
+          							<input type="number" id="contrast" min="0" max="3" step="0.01" value="1" style="width:50px;">
+          							<input type="button" value="ｺﾝﾄﾗｽﾄ" id="btnContrast" style="visibility: visible;">
+          							<input type="button" value="黒枠" id="btnBorder" style="visibility: visible;">&nbsp;&nbsp;&nbsp;&nbsp;
+          							<input type="button" value="復元" id="btnOriginal" style="visibility: visible;">
+          						</div>
+          						<input type="hidden" id="filterState" value="">
+          					</fieldset>
+          					<fieldset id="output">
+          						<legend>出力設定</legend>
+          						<div>
+          							<label title="変換処理方法を指定します．">処理モード</label>
+          							<label title="処理結果を単一のパスとして取得します．">
+          								<input type="radio" name="mode" value="single" checked="checked">単一パス</label>
+          							<label title="処理結果をパスの集合として取得します．">
+          								<input type="radio" name="mode" value="multi">複数パス</label>
+          						</div>
+          						<div>
+          							<label title="変換処理方法を指定します．">&nbsp;</label>
+          							<label title="パスの外形だけ出力し，fill属性を指定しません．">
+          								<input type="checkbox" id="ignoreFill">色を指定しない</label>
+          							<label title="パスの外形だけ出力し，fill属性を指定しません．">
+          								<input type="checkbox" id="flip">枠線を追加する</label>
+          						</div>
+          						<div title="塗り潰しの色を指定します．">
+          							<label>色1</label>
+          							<label><input type="radio" name="color1" value="#000000" checked="checked">黒</label>
+          							<label><input type="radio" name="color1" value="#ff0000">赤</label>
+          							<label><input type="radio" name="color1" value="#008000">緑</label>
+          							<label><input type="radio" name="color1" value="#0000ff">青</label>
+          							<label><input type="radio" name="color1" value="#ffffff">白</label>
+          							<input type="radio" name="color1" value="free">
+          							<input type="color" id="color1" value="#FFA500">
+          						</div>
+          						<div title="塗り潰しの色を指定します．複数パスモードの時に有効です．">
+          							<label>色2</label>
+          							<label><input type="radio" name="color2" value="#000000">黒</label>
+          							<label><input type="radio" name="color2" value="#ff0000">赤</label>
+          							<label><input type="radio" name="color2" value="#008000">緑</label>
+          							<label><input type="radio" name="color2" value="#0000ff">青</label>
+          							<label><input type="radio" name="color2" value="#ffffff" checked="checked">白</label>
+          							<input type="radio" name="color2" value="free">
+          							<input type="color" id="color2" value="#FFA500">
+          						</div>
+          						<div id="buttons">
+          							<div style="float:left;" title="表示されているsvgを編集します．">
+          								svgの編集<input id="chkSvgEdit" type="checkbox">
+          								<span id="chkLoupeLabel" style="visibility: hidden;">拡大鏡</span><input id="chkLoupe" type="checkbox" style="visibility: hidden;">
+          							</div>
+          							<a class="btn btn-default" target="_blank" id="linkSvg" style="visibility: visible;">Export SVG</a><a title="リンク先を拡張子「.svgz」として保存して下さい．" target="_blank" id="linkSvgz" style="display: none; visibility: visible;">[svgz]</a><a title="リンク先を拡張子「.png」として保存して下さい．" target="_blank" id="linkPng">[png]</a>
+          							<input type="button" id="btnTrace" value="実行" title="変換処理を実行します．" style="visibility: visible;">
+          							<input type="reset" id="btnReset" value="リセット" title="入力内容を初期化します．" style="visibility: visible;">
+          						</div>
+          					</fieldset>
+          					<div id="svgEdit">
+          						<fieldset id="loupeContainer">
+          							<legend>拡大鏡（※firefox専用）</legend>
+          							<div id="loupe" title="カーソル周辺がここに拡大表示されます．
+          ※firefox以外のブラウザでは動作しません．">
+          								<svg id="loupeSvg" width="200" height="200" viewBox="0 0 200 200">
+                            <path d="M 100,0 v 200 M 0,100 h 200" stroke="gray" stroke-opacity="0.8" stroke-width="0.5"></path>
+          								</svg>
+          							</div>
+          						</fieldset>
+          					</div>
+          				</div>
+          				<div>
+          					<fieldset id="insertBefore">
+          						<legend>pathの前に挿入するsvgコード</legend>
+          						<textarea id="txtBefore"></textarea>
+          					</fieldset>
+          					<fieldset id="insertAfter">
+          						<legend>pathの後に挿入するsvgコード</legend>
+          						<textarea id="txtAfter"></textarea>
+          					</fieldset>
+          				</div>
+          				<input type="hidden" id="prevCond" value="">
+          			</form>
+          			<div id="busy" style="display:none;">
+          				<div id="msg"></div>
+          				<svg width="300" height="300" viewBox="0 0 200 200">
+          					<g>
+          						<circle fill="blue" opacity="0.5" r="100" cx="100" cy="100"></circle>
+          						<image x="0" y="0" height="200" width="200" xlink:href="nc1123.png"></image>
+          						<text id="svgTxt" x="100" y="115" fill="black" font-size="18" text-anchor="middle" transform="translate(100,115),skewY(10),translate(-100,-115)">処理中</text>
+          					</g>
+          				</svg>
+          			</div>
+          		</section>
 
-          <div class="row">
-            <div class="col-xs-6 col-md-3">
-              <!-- <div class="thumbnail"> -->
-                <div id="imgdiv"> </div>
-                <!-- <div class="caption">
-                  <h4>Input image</h4>
-                </div> -->
-                <div id="svgdiv"> </div>
-              <!-- </div> -->
-            </div>
-          </div>
         </article>
-        <script src="Potrace.js"></script>
+        <!-- <script src="Potrace.js"></script> -->
       </div> <!-- HOME -->
 
       <div class="tab-pane" id="construct3D">
