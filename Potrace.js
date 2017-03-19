@@ -1259,7 +1259,7 @@ var Potrace = (function() {
 
     var svg = '<svg id="svg" version="1.1" width="' + 180 + 'mm" height="' + 240 +
         'mm" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">';
-    svg += '<path d="';
+    svg += '<path id="wire-path" d="';
     for (i = 0; i < len; i++) {
       c = pathlist[i].curve;
       svg += path(c);

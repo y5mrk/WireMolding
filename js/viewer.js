@@ -2,6 +2,7 @@ var animate_id;
 
 var scene, axis, grid, camera, orbit, webGLRenderer;
 var geometry, material, mesh;
+var controls;
 
 var main = () =>{
   scene = new THREE.Scene();
@@ -9,7 +10,7 @@ var main = () =>{
   // camera settings
 
   camera = new THREE.PerspectiveCamera( 75, 600 / 400, 1, 1000000 );
-  camera.position.set(30, 45, 1000);
+  camera.position.set(30, 45, 300);
   camera.lookAt(scene.position);
   // scene.add(camera);
   // orbit = new THREE.OrbitControls(camera);
@@ -57,7 +58,7 @@ var main = () =>{
 
   var step = 0;
   // setup the control gui
-  var controls = new function () {
+  controls = new function () {
       this.amount = 2;
       this.bevelThickness = 2;
       this.bevelSize = 0.5;
@@ -79,6 +80,7 @@ var main = () =>{
               curveSegments: controls.curveSegments,
               steps: controls.steps
           };
+          console.log(options.amount);
           shape = createMesh(new THREE.ExtrudeGeometry(drawShape(), options));
           // add it to the scene.
           scene.add(shape);
@@ -110,7 +112,7 @@ var main = () =>{
       mesh.scale.x = 0.1;
       mesh.scale.y = 0.1;
       mesh.rotation.z = Math.PI;
-      mesh.rotation.x = -1.1;
+      mesh.rotation.x = -1.5;
       return mesh;
   }
 
@@ -170,6 +172,35 @@ var mouseEvent = (webGLRenderer)=>{
     webGLRenderer.domElement.addEventListener('mouseout', function(e){
       mousedown = false;
     }, false);
+}
+
+function changeControlOptions(idName, option, newVal){
+  document.getElementById(idName).innerHTML=newVal;
+  switch (option){
+    case 'amount':
+      controls.amount = newVal;
+      break;
+    case 'bevelThickness':
+      controls.bevelThickness = newVal;
+      break;
+    case 'bevelSize':
+      controls.bevelSize = newVal;
+      break;
+    case 'bevelSegments':
+      controls.bevelSegments = newVal;
+      break;
+    case 'bevelEnabled':
+      controls.bevelEnabled = newVal;
+      break;
+    case 'curveSegments':
+      controls.curveSegments = newVal;
+      break;
+    case 'steps':
+      controls.steps = newVal;
+      break;
+  }
+  controls.option = newVal;
+  controls.asGeom();
 }
 
 // function handleMouseWheel( event ) {
