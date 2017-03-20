@@ -15,12 +15,6 @@ var main = () =>{
   // scene.add(camera);
   // orbit = new THREE.OrbitControls(camera);
 
-  geometry = new THREE.BoxGeometry( 200, 200, 200 );
-  material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
-
-  mesh = new THREE.Mesh( geometry, material );
-  scene.add( mesh );
-
   //add renderer to DOM
   webGLRenderer = new THREE.WebGLRenderer({
     preserveDrawingBuffer: true

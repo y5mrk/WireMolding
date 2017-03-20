@@ -35,7 +35,8 @@ window.onload = function(){
 		contrast: document.getElementById("contrast"),
 		filterState: document.getElementById("filterState"),
 		chkSvgEdit: document.getElementById("chkSvgEdit"),
-		chkLoupe: document.getElementById("chkLoupe")
+		chkLoupe: document.getElementById("chkLoupe"),
+		showSketch: document.getElementById("showSketch")
 	};
 
 	//環境条件チェック
@@ -159,6 +160,10 @@ window.onload = function(){
 				fields.sourceHeight.value = "";
 			}
 		}
+
+		// fields.showSketchonclick = function(){
+		// 	controls.asGeom();
+		// }
 
 		//フィルタ処理
 		input.addEventListener("click", function(e){
