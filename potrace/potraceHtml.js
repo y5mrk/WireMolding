@@ -35,7 +35,8 @@ window.onload = function(){
 		contrast: document.getElementById("contrast"),
 		filterState: document.getElementById("filterState"),
 		chkSvgEdit: document.getElementById("chkSvgEdit"),
-		chkLoupe: document.getElementById("chkLoupe")
+		chkLoupe: document.getElementById("chkLoupe"),
+		showSketch: document.getElementById("showSketch")
 	};
 
 	//環境条件チェック
@@ -158,6 +159,10 @@ window.onload = function(){
 				fields.sourceWidth.value = "";
 				fields.sourceHeight.value = "";
 			}
+		}
+
+		fields.showSketch.onclick = function(){
+			controls.asGeom();
 		}
 
 		//フィルタ処理
@@ -451,11 +456,15 @@ window.onload = function(){
 		function drawSvg(img){
 			clearSVG();
 			var svg = getSVGElement();
-			// if(img.width>)
-			svg.setAttribute("width", img.width);
-			svg.setAttribute("height", img.height);
-			svg.setAttribute("viewBox", [0,0,img.width,img.height].join(" "));
-
+			if(img.width > img.height){
+				svg.setAttribute("width", "240mm");
+				svg.setAttribute("height", "180mm");
+				svg.setAttribute("viewBox", [0,0,img.width,img.height].join(" "));
+			}else{
+				svg.setAttribute("width", "180mm");
+				svg.setAttribute("height", "240mm");
+				svg.setAttribute("viewBox", [0,0,img.width,img.height].join(" "));
+			}
 			if(fieldManager.changedCondition()){
 				setupParam();
 				prevResult = Potrace.trace(img);

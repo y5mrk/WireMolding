@@ -68,7 +68,7 @@
                   <iframe id="svgFrame" src="potrace/inner.html" scrolling="no"></iframe>
                   <div id="svgCover"></div>
                   <svg id="svgBG" width="400" height="400" viewBox="0 0 400 400">
-                    <image id="svgBGImg" x="0" y="0" width="400" height="400"></image>
+                    <image style="display:none" id="svgBGImg" x="0" y="0" width="400" height="400"></image>
                   </svg>
                   <img id="img" src="potrace/null.png">
                 </a>
@@ -117,26 +117,38 @@
                 <div class="col-sm-4">
       					<fieldset id="input">
                   <div class="panel panel-success">
-                    <div class="panel-heading">Setting</div>
+                    <div class="panel-heading">Input Setting</div>
                     <div class="panel-body">
-          						<div title="0〜1 画像を2値化する際の基準明度を指定します．">
+          						<div>
           							<label>threshold</label>
-          							<input type="number" id="threshold" min="0" max="1" step="0.005" value="0.625">
+                        <div class="range range-info">
+                          <input type="range" name="range" min="0" max="1" step="0.005" value="0.625" onchange="threshold.value=value">
+                          <output id="threshold">0.625</output>
+                        </div>
           						</div>
-          						<div title="0〜100 パス化した際のゴミを削除します．">
-          							<label>ノイズ除去</label>
-          							<input type="number" id="turdSize" min="0" max="100" value="3">
+          						<div>
+          							<label>noise reduction: </label>
+                        <div class="range range-info">
+                          <input type="range" name="range" min="0" max="100" step="1" value="3" onchange="turdSize.value=value">
+                          <output id="turdSize">3</output>
+                        </div>
           						</div>
-          						<div title="0〜1 値を小さくすると，直線が多く含まれるようになります．0で無効．">
-          							<label>αmax</label>
-          							<input type="number" id="alphamax" min="0" max="1" step="0.005" value="0.9">
+          						<div >
+          							<label>αmax: </label>
+                        <div class="range range-info">
+                          <input type="range" name="range" min="0" max="1" step="0.005" value="0.9" onchange="alphamax.value=value">
+                          <output id="alphamax">0.9</output>
+                        </div>
           						</div>
-          						<div title="-1(丸め無し),0〜5 桁数を少なくすることで，ファイルサイズを下げる効果があります．">
-          							<label>精度桁数</label>
-          							<input type="number" id="precision" min="-1" max="5" step="1" value="-1">
+          						<div>
+          							<label>significant figure: </label>
+                        <div class="range range-info">
+                          <input type="range" name="range" min="-1" max="5" step="1" value="-1" onchange="precision.value=value">
+                          <output id="precision">-1</output>
+                        </div>
           						</div>
           						<input type="checkBox" id="chkFilter">
-          						<div title="画像に効果を与えます．">
+          						<div style="display:none">
           							<label>効果</label>
           							<input type="button" value="ぼかし" id="btnBlur" style="visibility: visible;">
           							<input type="button" value="ｼｬｰﾌﾟ" id="btnSharpness" style="visibility: visible;">
@@ -144,7 +156,7 @@
           							<input type="button" value="緑成分" id="btnGreenToGray" style="visibility: visible;">
           							<input type="button" value="青成分" id="btnBlueToGray" style="visibility: visible;">
           						</div>
-          						<div title="画像に効果を与えます．"><span>《画像にフィルターを掛ける場合は，チェックを入れて下さい．》</span>
+          						<div style="display:none">
           							<input type="number" id="gamma" min="0" max="3" step="0.01" value="0.5" style="width:50px;">
           							<input type="button" value="ガンマ" id="btnGamma" style="visibility: visible;">
           							<input type="number" id="contrast" min="0" max="3" step="0.01" value="1" style="width:50px;">
@@ -160,45 +172,45 @@
                 <div class="col-sm-4">
       					<fieldset id="output">
                   <div class="panel panel-info">
-                    <div class="panel-heading">出力設定</div>
+                    <div class="panel-heading">Output Setting</div>
                     <div class="panel-body">
                       <div>
-          							<label title="変換処理方法を指定します．">処理モード</label>
+          							<label title="変換処理方法を指定します．">processing mode: </label>
           							<label title="処理結果を単一のパスとして取得します．">
-          								<input type="radio" name="mode" value="single" checked="checked">単一パス</label>
+          								<input type="radio" name="mode" value="single" checked="checked">single path</label>
           							<label title="処理結果をパスの集合として取得します．">
-          								<input type="radio" name="mode" value="multi">複数パス</label>
+          								<input type="radio" name="mode" value="multi">multiple paths</label>
           						</div>
           						<div>
           							<label title="変換処理方法を指定します．">&nbsp;</label>
           							<label title="パスの外形だけ出力し，fill属性を指定しません．">
           								<input type="checkbox" id="ignoreFill">色を指定しない</label>
           							<label title="パスの外形だけ出力し，fill属性を指定しません．">
-          								<input type="checkbox" id="flip">枠線を追加する</label>
+          								<input type="checkbox" id="flip">Add outline</label>
           						</div>
           						<div title="塗り潰しの色を指定します．">
-          							<label>色1</label>
-          							<label><input type="radio" name="color1" value="#000000" checked="checked">黒</label>
-          							<label><input type="radio" name="color1" value="#ff0000">赤</label>
-          							<label><input type="radio" name="color1" value="#008000">緑</label>
-          							<label><input type="radio" name="color1" value="#0000ff">青</label>
-          							<label><input type="radio" name="color1" value="#ffffff">白</label>
+          							<label>color 1: </label>
+          							<label><input type="radio" name="color1" value="#000000" checked="checked">Bk</label>
+          							<label><input type="radio" name="color1" value="#ff0000">R</label>
+          							<label><input type="radio" name="color1" value="#008000">G</label>
+          							<label><input type="radio" name="color1" value="#0000ff">B</label>
+          							<label><input type="radio" name="color1" value="#ffffff">W</label>
           							<input type="radio" name="color1" value="free">
           							<input type="color" id="color1" value="#FFA500">
           						</div>
           						<div title="塗り潰しの色を指定します．複数パスモードの時に有効です．">
-          							<label>色2</label>
-          							<label><input type="radio" name="color2" value="#000000">黒</label>
-          							<label><input type="radio" name="color2" value="#ff0000">赤</label>
-          							<label><input type="radio" name="color2" value="#008000">緑</label>
-          							<label><input type="radio" name="color2" value="#0000ff">青</label>
-          							<label><input type="radio" name="color2" value="#ffffff" checked="checked">白</label>
+          							<label>color 2: </label>
+          							<label><input type="radio" name="color2" value="#000000">Bk</label>
+          							<label><input type="radio" name="color2" value="#ff0000">R</label>
+          							<label><input type="radio" name="color2" value="#008000">G</label>
+          							<label><input type="radio" name="color2" value="#0000ff">B</label>
+          							<label><input type="radio" name="color2" value="#ffffff" checked="checked">W</label>
           							<input type="radio" name="color2" value="free">
           							<input type="color" id="color2" value="#FFA500">
           						</div>
           						<div id="buttons">
           							<div style="float:left;" title="表示されているsvgを編集します．">
-          								svgの編集<input id="chkSvgEdit" type="checkbox">
+          								Edit SVG: <input id="chkSvgEdit" type="checkbox">
           								<span id="chkLoupeLabel" style="visibility: hidden;">拡大鏡</span><input id="chkLoupe" type="checkbox" style="visibility: hidden;">
           							</div>
           							<a class="btn btn-default" target="_blank" id="linkSvg" style="visibility: visible;">Export SVG</a><br>
@@ -227,7 +239,7 @@
       					</div>
                 </div>
       				</div>
-      				<div class="row">
+      				<div class="row" style="display:none;">
                 <div class="col-sm-4">
       					<fieldset id="insertBefore">
                   <div class="panel panel-warning">
@@ -282,10 +294,9 @@
           </div>
 
           <div id="control-area">
+            <input class="btn btn-default" type="button" id="showSketch" value="Show new sketch" style="visibility: visible;">
             <p>amount</p>
             <div class="range range-info">
-              <!-- <input type="range" name="range" min="0" max="20" step="0.1" value="2" onchange="rangePrimary.value=value">
-              <output id="rangePrimary">2</output> -->
               <input type="range" name="range" min="0" max="20" step="1" value="2" onchange="changeControlOptions('controlAmount', 'amount', this.value)">
               <output id="controlAmount">2</output>
             </div>
