@@ -52,51 +52,75 @@
           <p></p>
 
           <section id="main">
-          			<div id="view">
-          				<div id="canvasContainer">
-          					<canvas id="canvas" width="400" height="400" title="任意の画像ファイルをここにドロップして下さい．"></canvas>
-          				</div>
-          				<iframe id="svgFrame" src="potrace/inner.html" scrolling="no"></iframe>
-          				<div id="svgCover" title="処理結果のsvgがここに表示されます．"></div>
-          				<svg id="svgBG" width="400" height="400" viewBox="0 0 400 400">
-          					<image id="svgBGImg" x="0" y="0" width="400" height="400"></image>
-          				</svg>
-          				<img id="img" src="potrace/null.png">
-          			</div>
-          			<form id="mainForm">
-          				<div>
-          					<fieldset id="source">
-          						<legend>入力画像情報</legend>
-          						<div>
-          							<label>幅</label>
+            <div id="view">
+              <div class="row">
+                <div class="col-sm-6">
+                <a href="#" class="thumbnail">
+                  <input type="file" id="file">
+                  <div id="canvasContainer">
+                    <!-- <div id="drop"><a href="#" id="imageSelect">open an image</a> <br> or drag an image here</div> -->
+                    <canvas id="canvas" width="400" height="400" title="drag an image here."></canvas>
+                  </div>
+                </a>
+                </div>
+                <div class="col-sm-6">
+                <a href="#" class="thumbnail" id="svgthum">
+                  <iframe id="svgFrame" src="potrace/inner.html" scrolling="no"></iframe>
+                  <div id="svgCover"></div>
+                  <svg id="svgBG" width="400" height="400" viewBox="0 0 400 400">
+                    <image id="svgBGImg" x="0" y="0" width="400" height="400"></image>
+                  </svg>
+                  <img id="img" src="potrace/null.png">
+                </a>
+                </div>
+              </div>
+            </div>  <!-- view -->
+
+      			<form id="mainForm">
+      				<div class="row">
+                <div class="col-sm-4">
+      					<fieldset id="source">
+                  <div class="panel panel-success">
+                    <div class="panel-heading">Information of the Image</div>
+                    <div class="panel-body">
+                      <div>
+          							<label>width: </label>
           							<input type="text" id="sourceWidth" readonly="readOnly">px
           						</div>
           						<div>
-          							<label>高さ</label>
+          							<label>height: </label>
           							<input type="text" id="sourceHeight" readonly="readOnly">px
           						</div>
-          					</fieldset>
-          					<fieldset id="result">
-          						<legend>出力情報</legend>
-          						<div title="大体のsvgファイルの大きさです．svgzではここから更に2〜3分の1のサイズになります．">
-          							<label>データ長</label>
+                    </div>
+                  </div>
+      					</fieldset>
+                </div>
+                <div class="col-sm-4">
+      					<fieldset id="result">
+                  <div class="panel panel-info">
+                    <div class="panel-heading">Information of Processing</div>
+                    <div class="panel-body">
+          						<div>
+          							<label>data length: </label>
           							<input type="text" id="resultLength" readonly="readOnly">B
           						</div>
-          						<div title="処理にかかった時間です．">
-          							<label>所要時間</label>
+          						<div>
+          							<label>the time required: </label>
           							<input type="text" id="resultTime" readonly="readOnly">ms
           						</div>
-          					</fieldset>
-          				</div>
-          				<div>
-          					<fieldset id="input">
-          						<legend>入力設定</legend>
-          						<div>
-          							<label>画像選択</label>
-          							<input type="file" id="file">
-          						</div>
+                    </div>
+                  </div>
+      					</fieldset>
+                </div>
+      				</div>
+      				<div  class="row">
+                <div class="col-sm-4">
+      					<fieldset id="input">
+                  <div class="panel panel-success">
+                    <div class="panel-heading">Setting</div>
+                    <div class="panel-body">
           						<div title="0〜1 画像を2値化する際の基準明度を指定します．">
-          							<label>閾値</label>
+          							<label>threshold</label>
           							<input type="number" id="threshold" min="0" max="1" step="0.005" value="0.625">
           						</div>
           						<div title="0〜100 パス化した際のゴミを削除します．">
@@ -129,10 +153,16 @@
           							<input type="button" value="復元" id="btnOriginal" style="visibility: visible;">
           						</div>
           						<input type="hidden" id="filterState" value="">
-          					</fieldset>
-          					<fieldset id="output">
-          						<legend>出力設定</legend>
-          						<div>
+                    </div>
+                  </div>
+      					</fieldset>
+                </div>
+                <div class="col-sm-4">
+      					<fieldset id="output">
+                  <div class="panel panel-info">
+                    <div class="panel-heading">出力設定</div>
+                    <div class="panel-body">
+                      <div>
           							<label title="変換処理方法を指定します．">処理モード</label>
           							<label title="処理結果を単一のパスとして取得します．">
           								<input type="radio" name="mode" value="single" checked="checked">単一パス</label>
@@ -171,35 +201,56 @@
           								svgの編集<input id="chkSvgEdit" type="checkbox">
           								<span id="chkLoupeLabel" style="visibility: hidden;">拡大鏡</span><input id="chkLoupe" type="checkbox" style="visibility: hidden;">
           							</div>
-          							<a class="btn btn-default" target="_blank" id="linkSvg" style="visibility: visible;">Export SVG</a><a title="リンク先を拡張子「.svgz」として保存して下さい．" target="_blank" id="linkSvgz" style="display: none; visibility: visible;">[svgz]</a><a title="リンク先を拡張子「.png」として保存して下さい．" target="_blank" id="linkPng">[png]</a>
-          							<input type="button" id="btnTrace" value="実行" title="変換処理を実行します．" style="visibility: visible;">
-          							<input type="reset" id="btnReset" value="リセット" title="入力内容を初期化します．" style="visibility: visible;">
+          							<a class="btn btn-default" target="_blank" id="linkSvg" style="visibility: visible;">Export SVG</a><br>
+                        <a target="_blank" id="linkSvgz" style="display: none; visibility: visible;"></a><a title="リンク先を拡張子「.png」として保存して下さい．" target="_blank" id="linkPng"></a>
+          							<input class="btn btn-default" type="button" id="btnTrace" value="Run" style="visibility: visible;">
+          							<input class="btn btn-default" type="reset" id="btnReset" value="Reset" style="visibility: visible;">
           						</div>
-          					</fieldset>
-          					<div id="svgEdit">
-          						<fieldset id="loupeContainer">
-          							<legend>拡大鏡（※firefox専用）</legend>
-          							<div id="loupe" title="カーソル周辺がここに拡大表示されます．
-          ※firefox以外のブラウザでは動作しません．">
-          								<svg id="loupeSvg" width="200" height="200" viewBox="0 0 200 200">
+                    </div>
+                  </div>
+      					</fieldset>
+                </div>
+                <div class="col-sm-4">
+      					<div id="svgEdit">
+      						<fieldset id="loupeContainer">
+                    <div class="panel panel-warning">
+                      <div class="panel-heading">拡大鏡（※firefox専用）</div>
+                      <div class="panel-body">
+                        <div id="loupe" title="カーソル周辺がここに拡大表示されます．  ※firefox以外のブラウザでは動作しません．">
+                          <svg id="loupeSvg" width="200" height="200" viewBox="0 0 200 200">
                             <path d="M 100,0 v 200 M 0,100 h 200" stroke="gray" stroke-opacity="0.8" stroke-width="0.5"></path>
-          								</svg>
-          							</div>
-          						</fieldset>
-          					</div>
-          				</div>
-          				<div>
-          					<fieldset id="insertBefore">
-          						<legend>pathの前に挿入するsvgコード</legend>
-          						<textarea id="txtBefore"></textarea>
-          					</fieldset>
-          					<fieldset id="insertAfter">
-          						<legend>pathの後に挿入するsvgコード</legend>
-          						<textarea id="txtAfter"></textarea>
-          					</fieldset>
-          				</div>
-          				<input type="hidden" id="prevCond" value="">
-          			</form>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+      						</fieldset>
+      					</div>
+                </div>
+      				</div>
+      				<div class="row">
+                <div class="col-sm-4">
+      					<fieldset id="insertBefore">
+                  <div class="panel panel-warning">
+                    <div class="panel-heading">pathの前に挿入するsvgコード</div>
+                    <div class="panel-body">
+                      <textarea id="txtBefore"></textarea>
+                    </div>
+                  </div>
+      					</fieldset>
+                </div>
+                <div class="col-sm-4">
+      					<fieldset id="insertAfter">
+                  <div class="panel panel-warning">
+                    <div class="panel-heading">pathの後に挿入するsvgコード</div>
+                    <div class="panel-body">
+                      <textarea id="txtAfter"></textarea>
+                    </div>
+                  </div>
+      					</fieldset>
+                </div>
+      				</div>
+      				<input type="hidden" id="prevCond" value="">
+      			</form>
           			<div id="busy" style="display:none;">
           				<div id="msg"></div>
           				<svg width="300" height="300" viewBox="0 0 200 200">
@@ -213,7 +264,6 @@
           		</section>
 
         </article>
-        <!-- <script src="Potrace.js"></script> -->
       </div> <!-- HOME -->
 
       <div class="tab-pane" id="construct3D">

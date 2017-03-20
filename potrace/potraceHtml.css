@@ -1,11 +1,11 @@
-body{
+/*body{
 	width:800px;
 	font-family:sans-serif;
 	font-size:14px;
 	background-image:url(../svgMemo/dotGradient.svg);
 	background-repeat:repeat-y;
 	position:relative;
-}
+}*/
 section:after{
 	display:block;
 	width:0;
@@ -24,13 +24,26 @@ footer{
 #canvasContainer,#svgFrame{
 	width:400px;
 	height:400px;
-	box-shadow:0 0 3px black ,0 0 0 2px lightgray inset;
+	/*box-shadow:0 0 3px black ,0 0 0 2px lightgray inset;*/
 	display:inline-block;
 	background-color:rgba(250,250,250,0.5);
 	position:relative;
 	z-index:0;
 }
-#svgBG,#svgCover{
+
+#svgthum{
+	padding-top: 20px;
+}
+
+#svgBG{
+	width:400px;
+	height:400px;
+	position:absolute;
+	left:400px;
+	z-index:-1;
+	opacity:0.5;
+}
+#svgCover{
 	width:400px;
 	height:400px;
 	position:absolute;
@@ -63,24 +76,21 @@ footer{
 #img{
 	display:none;
 }
-legend{
-	padding:2px 10px;
-	text-shadow: 1px 1px rgba(128,128,128,0.5);
-	border-radius:8px;
-	box-shadow:0 1px 1px 1px rgba(0,0,0,0.4);
-	background-color:inherit;
+
+.panel{
+	width: 400;
 }
 fieldset{
 	width:376px;
 	margin:5px 2px 2px 2px;
 	padding:10px;
-	border:1px lightgray solid;
+	/*border:1px lightgray solid;
 	float:left;
 	border-radius:5px;
 	border:none;
-	box-shadow:0 2px 3px black;
+	box-shadow:0 2px 3px black;*/
 }
-fieldset#source,fieldset#result{
+/*fieldset#source,fieldset#result{
 	height:40px;
 }
 fieldset#input,fieldset#output{
@@ -139,7 +149,7 @@ fieldset>textArea{
 	height:75px;
 	font-size:13px;
 	line-height:15px;
-}
+}*/
 #buttons{
 	text-align:right;
 	position:relative;

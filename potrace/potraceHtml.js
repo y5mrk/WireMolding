@@ -105,7 +105,7 @@ window.onload = function(){
 				return;
 			}
 			if(img.width * img.height > 2000 * 2000){
-				if(fieldManager.changedCondition() && !confirm("ピクセル数が4,000,000を超えています．ブラウザの処理能力を超過する恐れがありますが，続行しますか？")){
+				if(fieldManager.changedCondition() && !confirm("The number of pixels exceeds 4,000,000. It may take time...")){
 					return;
 				}
 			}
@@ -475,6 +475,7 @@ window.onload = function(){
 					node = prevResult.toPathElements();
 					if(fields.flip.checked){
 						var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+						path.setAttribute("id", "wire-path");
 						path.setAttribute("class", "even");
 						path.setAttribute("d", getBoundary());
 						node.insertBefore(path, node.firstChild);
