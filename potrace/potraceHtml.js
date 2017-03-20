@@ -121,12 +121,15 @@ window.onload = function(){
 				var start = new Date();
 				svgManager.drawSvg(canvas);
 				var end = new Date();
-				fields.resultLength.value = format(svgManager.getSVGSource().length);
+				var svgData = svgManager.getSVGSource();
+				fields.resultLength.value = format(svgData.length);
 				fields.resultTime.value = format(end.getTime() - start.getTime());
 				linkSvg.href = "ready";
 				linkSvgz.href = "ready";
 				linkPng.href = "ready";
 				fieldManager.fieldDisabled(false);
+				document.getElementById("batman").innerHTML = svgData;
+				// controls.asGeom();
 			}
 
 			function format(val){
@@ -448,6 +451,7 @@ window.onload = function(){
 		function drawSvg(img){
 			clearSVG();
 			var svg = getSVGElement();
+			// if(img.width>)
 			svg.setAttribute("width", img.width);
 			svg.setAttribute("height", img.height);
 			svg.setAttribute("viewBox", [0,0,img.width,img.height].join(" "));
@@ -468,6 +472,7 @@ window.onload = function(){
 					if(fieldManager.ignoreFill()){
 						break;
 					}
+					node.setAttribute("id", "wire-path");
 					node.setAttribute("fill", fieldManager.getColor1());
 					break;
 				case "multi":
@@ -475,8 +480,8 @@ window.onload = function(){
 					node = prevResult.toPathElements();
 					if(fields.flip.checked){
 						var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-						path.setAttribute("id", "wire-path");
 						path.setAttribute("class", "even");
+						path.setAttribute("id", "wire-path");
 						path.setAttribute("d", getBoundary());
 						node.insertBefore(path, node.firstChild);
 					}
@@ -576,6 +581,7 @@ window.onload = function(){
 			var ctx = c_svg.getContext("2d");
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			ctx.drawSvg(svg, 0, 0, canvas.width, canvas.height);
+			console.log(svg);
 			var dataUrl = c_svg.toDataURL("image/png");
 			try{
 				//var blob = c_svg.toBlob();

@@ -99,7 +99,7 @@ var main = () =>{
   controls.asGeom();
 
   function drawShape() {
-      var svgString = document.querySelector("#batman-path").getAttribute("d");
+      var svgString = document.querySelector("#wire-path").getAttribute("d");
       var shape = transformSVGPathExposed(svgString);
       // return the shape
       return shape;
