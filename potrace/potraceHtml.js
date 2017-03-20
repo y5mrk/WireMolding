@@ -161,9 +161,9 @@ window.onload = function(){
 			}
 		}
 
-		// fields.showSketchonclick = function(){
-		// 	controls.asGeom();
-		// }
+		fields.showSketch.onclick = function(){
+			controls.asGeom();
+		}
 
 		//フィルタ処理
 		input.addEventListener("click", function(e){
