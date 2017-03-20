@@ -1,0 +1,19 @@
+#viewer-top{
+  float: left;
+  width: 680px;
+  height: calc(100% - 40px);
+  height: -webkit-calc(100% - 40px);
+  float: left;
+  padding: 10px 0px;
+  margin: 10px 0px;
+}
+
+#viewer-area{
+  margin: 10px 40px;
+  padding: 0px;
+
+  width: 600px;
+  height: 400px;
+
+  border: 0.1px solid #dadada;
+}
