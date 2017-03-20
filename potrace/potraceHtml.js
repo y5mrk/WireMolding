@@ -456,11 +456,15 @@ window.onload = function(){
 		function drawSvg(img){
 			clearSVG();
 			var svg = getSVGElement();
-			// if(img.width>)
-			svg.setAttribute("width", img.width);
-			svg.setAttribute("height", img.height);
-			svg.setAttribute("viewBox", [0,0,img.width,img.height].join(" "));
-
+			if(img.width > img.height){
+				svg.setAttribute("width", "240mm");
+				svg.setAttribute("height", "180mm");
+				svg.setAttribute("viewBox", [0,0,img.width,img.height].join(" "));
+			}else{
+				svg.setAttribute("width", "180mm");
+				svg.setAttribute("height", "240mm");
+				svg.setAttribute("viewBox", [0,0,img.width,img.height].join(" "));
+			}
 			if(fieldManager.changedCondition()){
 				setupParam();
 				prevResult = Potrace.trace(img);
