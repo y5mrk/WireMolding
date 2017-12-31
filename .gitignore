@@ -1,4 +1,5 @@
-
+.DS_Store
 *.swp
+npm-debug.log
 node_modules/
 WireMolding.asar
